@@ -3,8 +3,8 @@
 # Encoding: utf-8
 
 #
-# jekyll-category-pages
-# Add category index pages with and without pagination.
+# jekyll-tag-pages
+# Add tag index pages with and without pagination.
 #
 # (c) since 2017 by Tamanguu GmbH & Co KG
 # Written by Dr. Wolfram Schroers <Wolfram.Schroers -at- tamanguu.com>
@@ -13,7 +13,7 @@
 #
 
 module Jekyll
-  module CategoryPages
+  module TagPages
     VERSION = "1.0.0".freeze
   end
 end

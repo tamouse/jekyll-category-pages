@@ -2,8 +2,8 @@
 # Encoding: utf-8
 
 #
-# category_pages
-# Add category index pages with and without pagination.
+# tag_pages
+# Add tag index pages with and without pagination.
 #
 # (c) since 2017 by Tamanguu GmbH & Co KG
 # Written by Dr. Wolfram Schroers <Wolfram.Schroers -at- tamanguu.com>
@@ -15,7 +15,7 @@
 require 'jekyll'
 
 module Jekyll
-  module CategoryPages
+  module TagPages
     INDEXFILE = 'index.html'
 
     # Custom generator for generating all index pages based on a supplied layout.
@@ -28,59 +28,59 @@ module Jekyll
       safe true
       priority :lowest
 
-      # Generate paginated category pages if necessary.
+      # Generate paginated tag pages if necessary.
       #
       # site - The Site object.
       def generate(site)
-        category_base_path = site.config['category_path'] || 'category'
-        category_layout_path = File.join('_layouts/', site.config['category_layout'] || 'category_index.html')
+        tag_base_path = site.config['tag_path'] || 'tag'
+        tag_layout_path = File.join('_layouts/', site.config['tag_layout'] || 'tag_index.html')
 
         if Paginate::Pager.pagination_enabled?(site)
-          # Generate paginated category pages
-          generate_paginated_categories(site, category_base_path, category_layout_path)
+          # Generate paginated tag pages
+          generate_paginated_tags(site, tag_base_path, tag_layout_path)
         else
-          # Generate category pages without pagination
-          generate_categories(site, category_base_path, category_layout_path)
+          # Generate tag pages without pagination
+          generate_tags(site, tag_base_path, tag_layout_path)
         end
       end
 
-      # Sort the list of categories and remove duplicates.
+      # Sort the list of tags and remove duplicates.
       #
       # site - The Site object.
       #
-      # Returns an array of strings containing the site's categories.
-      def sorted_categories(site)
-        categories = []
-        site.categories.each_pair do |category, pages|
-          categories.push(category)
+      # Returns an array of strings containing the site's tags.
+      def sorted_tags(site)
+        tags = []
+        site.tags.each_pair do |tag, pages|
+          tags.push(tag)
         end
-        categories.sort!.uniq!
-        return categories
+        tags.sort!.uniq!
+        return tags
       end
 
-      # Generate the paginated category pages.
+      # Generate the paginated tag pages.
       #
       # site               - The Site object.
-      # category_base_path - String with the base path to the category index pages.
-      # category_layout    - The name of the basic category layout page.
-      def generate_paginated_categories(site, category_base_path, category_layout)
-        categories = sorted_categories site
+      # tag_base_path - String with the base path to the tag index pages.
+      # tag_layout    - The name of the basic tag layout page.
+      def generate_paginated_tags(site, tag_base_path, tag_layout)
+        tags = sorted_tags site
 
         # Generate the pages
-        for category in categories
-          posts_in_category = site.categories[category]
-          category_path = File.join(category_base_path, CGI.escape(category))
+        for tag in tags
+          posts_in_tag = site.tags[tag]
+          tag_path = File.join(tag_base_path, CGI.escape(tag))
           per_page = site.config['paginate']
 
-          page_number = CategoryPager.calculate_pages(posts_in_category, per_page)
+          page_number = TagPager.calculate_pages(posts_in_tag, per_page)
           page_paths = []
-          category_pages = []
+          tag_pages = []
           (1..page_number).each do |current_page|
             # Collect all paths in the first pass and generate the basic page templates.
             page_name = current_page == 1 ? INDEXFILE : "page#{current_page}.html"
             page_paths.push page_name
-            new_page = CategoryIndexPage.new(site, category_path, page_name, category, category_layout, posts_in_category, true)
-            category_pages.push new_page
+            new_page = TagIndexPage.new(site, tag_path, page_name, tag, tag_layout, posts_in_tag, true)
+            tag_pages.push new_page
           end
 
           (1..page_number).each do |current_page|
@@ -89,49 +89,49 @@ module Jekyll
             next_link = current_page == page_number ? nil : page_paths[current_page]
             previous_page = current_page == 1 ? nil : (current_page - 1)
             next_page = current_page == page_number ? nil : (current_page + 1)
-            category_pages[current_page - 1].add_paginator_relations(current_page, per_page, page_number,
+            tag_pages[current_page - 1].add_paginator_relations(current_page, per_page, page_number,
                                                                      previous_link, next_link, previous_page, next_page)
           end
 
-          for page in category_pages
+          for page in tag_pages
             # Finally, add the new pages to the site in the third pass.
             site.pages << page
           end
         end
 
-        Jekyll.logger.debug("Paginated categories", "Processed " + categories.size.to_s + " paginated category index pages")
+        Jekyll.logger.debug("Paginated tags", "Processed " + tags.size.to_s + " paginated tag index pages")
       end
 
-      # Generate the non-paginated category pages.
+      # Generate the non-paginated tag pages.
       #
       # site               - The Site object.
-      # category_base_path - String with the base path to the category index pages.
-      # category_layout    - The name of the basic category layout page.
-      def generate_categories(site, category_base_path, category_layout)
-        categories = sorted_categories site
+      # tag_base_path - String with the base path to the tag index pages.
+      # tag_layout    - The name of the basic tag layout page.
+      def generate_tags(site, tag_base_path, tag_layout)
+        tags = sorted_tags site
 
         # Generate the pages
-        for category in categories
-          posts_in_category = site.categories[category]
-          category_path = File.join(category_base_path, CGI.escape(category))
+        for tag in tags
+          posts_in_tag = site.tags[tag]
+          tag_path = File.join(tag_base_path, CGI.escape(tag))
 
-          site.pages << CategoryIndexPage.new(site, category_path, INDEXFILE, category, category_layout, posts_in_category, false)
+          site.pages << TagIndexPage.new(site, tag_path, INDEXFILE, tag, tag_layout, posts_in_tag, false)
         end
 
-        Jekyll.logger.debug("Categories", "Processed " + categories.size.to_s + " category index pages")
+        Jekyll.logger.debug("Tags", "Processed " + tags.size.to_s + " tag index pages")
       end
 
     end
   end
 
-  # Auto-generated page for a category index.
+  # Auto-generated page for a tag index.
   #
-  # When pagination is enabled, contains a CategoryPager object as paginator. The posts in the
-  # category are always available as posts, the total number of those is always total_posts.
-  class CategoryIndexPage < Page
+  # When pagination is enabled, contains a TagPager object as paginator. The posts in the
+  # tag are always available as posts, the total number of those is always total_posts.
+  class TagIndexPage < Page
     # Attributes for Liquid templates.
     ATTRIBUTES_FOR_LIQUID = %w(
-      category
+      tag
       paginator
       posts
       total_posts
@@ -142,40 +142,40 @@ module Jekyll
       url
     )
 
-    # Initialize a new category index page.
+    # Initialize a new tag index page.
     #
     # site              - The Site object.
-    # dir               - Base directory for all category pages.
-    # page_name         - Name of this category page (either 'index.html' or 'page#.html').
-    # category          - Current category as a String.
-    # category_layout   - Name of the category index page layout (must reside in the '_layouts' directory).
-    # posts_in_category - Array with full list of Posts in the current category.
-    # use_paginator     - Whether a CategoryPager object shall be instantiated as 'paginator'.
-    def initialize(site, dir, page_name, category, category_layout, posts_in_category, use_paginator)
+    # dir               - Base directory for all tag pages.
+    # page_name         - Name of this tag page (either 'index.html' or 'page#.html').
+    # tag          - Current tag as a String.
+    # tag_layout   - Name of the tag index page layout (must reside in the '_layouts' directory).
+    # posts_in_tag - Array with full list of Posts in the current tag.
+    # use_paginator     - Whether a TagPager object shall be instantiated as 'paginator'.
+    def initialize(site, dir, page_name, tag, tag_layout, posts_in_tag, use_paginator)
       @site = site
       @base = site.source
-      super(@site, @base, '', category_layout)
+      super(@site, @base, '', tag_layout)
       @dir = dir
       @name = page_name
 
       self.process @name
 
-      @category = category
-      @posts_in_category = posts_in_category
+      @tag = tag
+      @posts_in_tag = posts_in_tag
       @my_paginator = nil
 
-      self.read_yaml(@base, category_layout)
-      self.data.merge!('title' => category)
+      self.read_yaml(@base, tag_layout)
+      self.data.merge!('title' => tag)
       if use_paginator
-        @my_paginator = CategoryPager.new
+        @my_paginator = TagPager.new
         self.data.merge!('paginator' => @my_paginator)
       end
     end
 
-    # Add relations of this page to other pages handled by a CategoryPager.
+    # Add relations of this page to other pages handled by a TagPager.
     #
-    # Note that this method SHALL NOT be called if the category pages are instantiated without pagination.
-    # This method SHALL be called if the category pages are instantiated with pagination.
+    # Note that this method SHALL NOT be called if the tag pages are instantiated without pagination.
+    # This method SHALL be called if the tag pages are instantiated with pagination.
     #
     # page               - Current page number.
     # per_page           - Posts per page.
@@ -188,43 +188,43 @@ module Jekyll
       if @my_paginator
         @my_paginator.add_relations(page, per_page, total_pages,
                                     previous_page, next_page, previous_page_path, next_page_path)
-        @my_paginator.add_posts(page, per_page, @posts_in_category)
+        @my_paginator.add_posts(page, per_page, @posts_in_tag)
       else
-        Jekyll.logger.warn("Categories", "add_relations does nothing since the category page has been initialized without pagination")
+        Jekyll.logger.warn("Tags", "add_relations does nothing since the tag page has been initialized without pagination")
       end
     end
 
-    # Get the category name this index page refers to
+    # Get the tag name this index page refers to
     #
     # Returns a string.
-    def category
-      @category
+    def tag
+      @tag
     end
 
     # Get the paginator object describing the current index page.
     #
-    # Returns a CategoryPager object or nil.
+    # Returns a TagPager object or nil.
     def paginator
       @my_paginator
     end
 
-    # Get all Posts in this category.
+    # Get all Posts in this tag.
     #
     # Returns an Array of Posts.
     def posts
-      @posts_in_category
+      @posts_in_tag
     end
 
-    # Get the number of posts in this category.
+    # Get the number of posts in this tag.
     #
     # Returns an Integer number of posts.
     def total_posts
-      @posts_in_category.size
+      @posts_in_tag.size
     end
   end
 
-  # Handle pagination of category index pages.
-  class CategoryPager
+  # Handle pagination of tag index pages.
+  class TagPager
     attr_reader :page, :per_page, :posts, :total_posts, :total_pages,
                 :previous_page, :previous_page_path, :next_page, :next_page_path
 
@@ -261,19 +261,19 @@ module Jekyll
     #
     # page              - Current page number.
     # per_page          - Posts per page.
-    # posts_in_category - Array with full list of Posts in the current category.
-    def add_posts(page, per_page, posts_in_category)
-      total_posts = posts_in_category.size
+    # posts_in_tag - Array with full list of Posts in the current tag.
+    def add_posts(page, per_page, posts_in_tag)
+      total_posts = posts_in_tag.size
       init = (page - 1) * per_page
       offset = (init + per_page - 1) >= total_posts ? total_posts : (init + per_page - 1)
 
       @total_posts = total_posts
-      @posts = posts_in_category[init..offset]
+      @posts = posts_in_tag[init..offset]
     end
 
-    # Convert this CategoryPager's data to a Hash suitable for use by Liquid.
+    # Convert this TagPager's data to a Hash suitable for use by Liquid.
     #
-    # Returns the Hash representation of this CategoryPager.
+    # Returns the Hash representation of this TagPager.
     def to_liquid
       {
           'page' => page,

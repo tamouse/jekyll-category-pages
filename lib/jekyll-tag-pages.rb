@@ -12,4 +12,4 @@
 # See the accompanying file LICENSE for licensing conditions.
 #
 
-require "jekyll/category_pages"
+require "jekyll/tag_pages"

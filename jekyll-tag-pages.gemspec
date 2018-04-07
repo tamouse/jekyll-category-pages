@@ -4,23 +4,23 @@
 
 lib = File.expand_path("lib", __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "jekyll-category-pages/version"
+require "jekyll-tag-pages/version"
 
 Gem::Specification.new do |spec|
-  spec.name = "jekyll-category-pages"
-  spec.summary = "Add category index pages with and without pagination."
+  spec.name = "jekyll-tag-pages"
+  spec.summary = "Add tag index pages with and without pagination."
   spec.description = <<-EOF
 This plugin is for all authors that tag their pages using categories. It generates
-category overview pages with a custom layout. Optionally, it also adds proper
+tag overview pages with a custom layout. Optionally, it also adds proper
 pagination for these pages.
 
 Please refer to the README.md file on the project homepage at
-https://github.com/field-theory/jekyll-category-pages
+https://github.com/tamouse/jekyll-tag-pages
 EOF
-  spec.version = Jekyll::CategoryPages::VERSION
+  spec.version = Jekyll::TagPages::VERSION
   spec.authors = ["Dr. Wolfram Schroers", "Tamanguu GmbH & Co KG"]
   spec.email = "Wolfram.Schroers@tamanguu.com"
-  spec.homepage = "https://github.com/field-theory/jekyll-category-pages"
+  spec.homepage = "https://github.com/tamouse/jekyll-tag-pages"
   spec.licenses = ["MIT"]
 
   spec.files = `git ls-files -z`.split("\x0").select do |f|

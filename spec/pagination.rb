@@ -1,20 +1,21 @@
+# coding: utf-8
 # Frozen-string-literal: true
 # Copyright: Since 2017 Tamanguu GmbH & Co KG - MIT License
 # Encoding: utf-8
 
-require 'jekyll-category-pages'
+require 'jekyll-tag-pages'
 
-basedir = 'spec/test/_site2/category/'
+basedir = 'spec/test/_site2/tag/'
 jekyll = basedir + 'jekyll/'
 haodezhuyi = basedir + '%E5%A5%BD%E7%9A%84%E4%B8%BB%E6%84%8F/'
-plugin = basedir + 'Category+Pages+Plugin/'
+plugin = basedir + 'Tag+Pages+Plugin/'
 index = 'index.html'
 page2 = 'page2.html'
 page3 = 'page3.html'
 
-describe Jekyll::CategoryPages do
+describe Jekyll::TagPages do
   context "with pagination" do
-    it "category indices exists" do
+    it "tag indices exists" do
       expect(File.file? jekyll+index).to be true
       expect(File.file? jekyll+page2).to be true
       expect(File.file? jekyll+page3).to be true
@@ -22,10 +23,10 @@ describe Jekyll::CategoryPages do
       expect(File.file? plugin+index).to be true
     end
 
-    it "category jekyll index is correct" do
+    it "tag jekyll index is correct" do
       load jekyll+index
       expect($page_title).to eql('jekyll')
-      expect($page_category).to eql('jekyll')
+      expect($page_tag).to eql('jekyll')
       expect($page_total_posts).to eql(5)
       expect($page_posts_title).to eql([ "More about Jekyll", "Everything you always wanted to know about Jekyll", "About the plugin", "Welcome to the plugin", "Welcome to Jekyll!" ])
 
@@ -39,10 +40,10 @@ describe Jekyll::CategoryPages do
       expect($page_paginator_posts_title).to eql([ "More about Jekyll", "Everything you always wanted to know about Jekyll" ])
     end
 
-    it "category jekyll page2 is correct" do
+    it "tag jekyll page2 is correct" do
       load jekyll+page2
       expect($page_title).to eql('jekyll')
-      expect($page_category).to eql('jekyll')
+      expect($page_tag).to eql('jekyll')
       expect($page_total_posts).to eql(5)
       expect($page_posts_title).to eql([ "More about Jekyll", "Everything you always wanted to know about Jekyll", "About the plugin", "Welcome to the plugin", "Welcome to Jekyll!" ])
 
@@ -56,10 +57,10 @@ describe Jekyll::CategoryPages do
       expect($page_paginator_posts_title).to eql([ "About the plugin", "Welcome to the plugin" ])
     end
 
-    it "category jekyll page3 is correct" do
+    it "tag jekyll page3 is correct" do
       load jekyll+page3
       expect($page_title).to eql('jekyll')
-      expect($page_category).to eql('jekyll')
+      expect($page_tag).to eql('jekyll')
       expect($page_total_posts).to eql(5)
       expect($page_posts_title).to eql([ "More about Jekyll", "Everything you always wanted to know about Jekyll", "About the plugin", "Welcome to the plugin", "Welcome to Jekyll!" ])
 
@@ -73,10 +74,10 @@ describe Jekyll::CategoryPages do
       expect($page_paginator_posts_title).to eql([ "Welcome to Jekyll!" ])
     end
 
-    it "category 好的主意 is correct" do
+    it "tag 好的主意 is correct" do
       load haodezhuyi+index
       expect($page_title).to eql('好的主意')
-      expect($page_category).to eql('好的主意')
+      expect($page_tag).to eql('好的主意')
       expect($page_total_posts).to eql(1)
       expect($page_posts_title).to eql([ "Welcome to the plugin" ])
 
@@ -90,10 +91,10 @@ describe Jekyll::CategoryPages do
       expect($page_paginator_posts_title).to eql([ "Welcome to the plugin" ])
     end
 
-    it "category Category Pages Plugin is correct" do
+    it "tag Tag Pages Plugin is correct" do
       load plugin+index
-      expect($page_title).to eql('Category Pages Plugin')
-      expect($page_category).to eql('Category Pages Plugin')
+      expect($page_title).to eql('Tag Pages Plugin')
+      expect($page_tag).to eql('Tag Pages Plugin')
       expect($page_total_posts).to eql(2)
       expect($page_posts_title).to eql([ "About the plugin", "Welcome to the plugin" ])
 

@@ -2,7 +2,7 @@
 layout: basic
 ---
 $page_title = '{{ page.title }}'
-$page_category = '{{ page.category }}'
+$page_tag = '{{ page.tag }}'
 $page_total_posts = {{ page.total_posts }}
 $page_posts_title = [ {% for post in page.posts %}"{{ post.title }}", {% endfor %}]
 {% if page.paginator %}{% assign paginator = page.paginator %}$page_paginator_total_posts = {{ paginator.total_posts }}

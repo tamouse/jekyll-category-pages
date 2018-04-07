@@ -1,4 +1,4 @@
-# jekyll-category-pages test project configuration 2
+# jekyll-tag-pages test project configuration 2
 
 title: Test configuration 2
 email: Wolfram.Schroers@tamanguu.com
@@ -9,7 +9,7 @@ markdown: kramdown
 theme: minima
 plugins:
     - jekyll-paginate
-    - jekyll-category-pages
+    - jekyll-tag-pages
 
 paginate: 2
 destination: _site2

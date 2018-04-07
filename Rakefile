@@ -8,7 +8,7 @@ task :default => :build
 
 # Build the gem
 task :build => [:test] do
-  sh "bundle exec gem build jekyll-category-pages.gemspec"
+  sh "bundle exec gem build jekyll-tag-pages.gemspec"
 end
 
 # Run Jekyll in the example directory
