@@ -1,0 +1,10 @@
+2020-12-24  Tamara Temple  <tamouse@gmail.com>
+
+	* .gitignore: ignore /spec/test/.jekyll-cache
+
+	* lib/jekyll-tag-pages/version.rb (Jekyll::TagPages): Bump Version
+
+	* jekyll-tag-pages.gemspec: Update jekyll version
+
+	* Gemfile: Update jekyll version
+
